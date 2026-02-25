@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sci Quiz Master </title>
+<title>Sci Quiz Master</title>
 <link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
@@ -23,7 +23,9 @@ body{
 margin:0;font-family:Segoe UI;background:var(--bg);color:var(--text);transition:0.3s;
 position:relative;
 }
-header{display:flex;justify-content:space-between;align-items:center;padding:15px 25px;font-size:22px;font-weight:bold;}
+header{
+display:flex;justify-content:space-between;align-items:center;padding:15px 25px;font-size:22px;font-weight:bold;flex-wrap:wrap;
+}
 .toggle{cursor:pointer;padding:6px 12px;border-radius:20px;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;}
 .container{max-width:800px;margin:auto;padding:20px;position:relative;}
 .card{backdrop-filter:blur(20px);background:var(--card);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin-top:20px;position:relative;}
@@ -37,13 +39,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
 #top10Box h3{text-align:center;}
 
 /* Timer style */
-#quizTimer{
-font-size:20px;
-font-weight:bold;
-color:red;
-text-align:center;
-margin-top:15px;
-}
+#quizTimer{font-size:20px;font-weight:bold;color:red;text-align:center;margin-top:15px;}
 
 /* Custom Alert */
 .alert-overlay, #glassAlert{
@@ -53,52 +49,32 @@ display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:
 .alert-overlay.active, #glassAlert.show{opacity:1;pointer-events:auto;}
 .alert-box, #glassAlertBox{
 background:rgba(255,255,255,0.2);backdrop-filter:blur(15px);padding:25px 35px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);
-color:#000000;
-font-weight: bold;font-size:20px;text-align:center;transform:translateY(-20px);transition:0.3s;
+color:#000000;font-weight: bold;font-size:20px;text-align:center;transform:translateY(-20px);transition:0.3s;
 }
-#glassAlert{
-position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:none;
-}
+#glassAlert{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:none;}
 
 /* Top10 Table Glass + Hover + Medal Colors */
-#top10List table {
-  width: 100%;
-  border-collapse: collapse;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.15);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-#top10List th, #top10List td {
-  padding: 12px 10px;
-  text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  color: var(--text);
-  font-weight: 500;
-}
-
-#top10List th {
-  background: rgba(255,255,255,0.25);
-  font-size: 16px;
-}
-
-#top10List tr:hover {
-  background: rgba(0,114,255,0.1);
-  cursor: default;
-  transition: 0.3s;
-}
-
-.medal-emoji {
-  font-size: 18px;
-  font-weight: bold;
-  padding-right: 4px;
-}
-
+#top10List table {width: 100%;border-collapse: collapse;backdrop-filter: blur(15px);background: rgba(255,255,255,0.15);border-radius: 15px;overflow: hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+#top10List th, #top10List td {padding: 12px 10px;text-align: left;border-bottom: 1px solid rgba(255,255,255,0.3);color: var(--text);font-weight: 500;}
+#top10List th {background: rgba(255,255,255,0.25);font-size: 16px;}
+#top10List tr:hover {background: rgba(0,114,255,0.1);cursor: default;transition: 0.3s;}
+.medal-emoji { font-size: 18px;font-weight: bold;padding-right: 4px;}
 .gold { color: #FFD700; }
 .silver { color: #C0C0C0; }
 .bronze { color: #cd7f32; }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media screen and (max-width:600px){
+header{font-size:18px;padding:10px 15px;}
+.start-row input, .start-row button{font-size:16px;padding:12px 15px;}
+.card{padding:20px;border-radius:15px;}
+#top10List th, #top10List td{font-size:14px;padding:8px 6px;}
+#quizTimer{font-size:18px;}
+
+/* Make Top 10 table scrollable horizontally */
+#top10List{overflow-x:auto;}
+#top10List table{min-width:500px;} /* ensures table columns don't shrink too much */
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
