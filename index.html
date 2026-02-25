@@ -1,27 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="si">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sci Quiz Master</title>
-
-<link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
-  
+<title>Sci Quiz Master </title>
+  <link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-:root{--bg:#f4f7fb;--card:rgba(255,255,255,0.6);--text:#111;--accent:#0072ff;}
-body.dark{--bg:#0f172a;--card:rgba(255,255,255,0.08);--text:#fff;--accent:#00c6ff;}
-body{margin:0;font-family:Segoe UI;background:var(--bg);color:var(--text);transition:0.3s;}
+:root{
+--bg:#f4f7fb;
+--card:rgba(255,255,255,0.6);
+--text:#111;
+--accent:#0072ff;
+}
+body.dark{
+--bg:#0f172a;
+--card:rgba(255,255,255,0.08);
+--text:#fff;
+--accent:#00c6ff;
+}
+body{
+margin:0;font-family:Segoe UI;background:var(--bg);color:var(--text);transition:0.3s;
+}
 header{display:flex;justify-content:space-between;align-items:center;padding:15px 25px;font-size:22px;font-weight:bold;}
 .toggle{cursor:pointer;padding:6px 12px;border-radius:20px;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;}
 .container{max-width:800px;margin:auto;padding:20px;}
-.card{backdrop-filter:blur(20px);background:var(--card);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin-top:20px;animation:fade 0.5s ease;}
+.card{backdrop-filter:blur(20px);background:var(--card);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin-top:20px;}
 .option{margin:10px 0;padding:10px;background:rgba(0,0,0,0.05);border-radius:10px;cursor:pointer;transition:0.2s;}
 .option:hover{transform:scale(1.05);background:var(--accent);color:white;}
-@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;}}
-.medal{font-size:22px;font-weight:bold;padding:6px;border-radius:10px;animation:bounce 1s infinite alternate;}
+.medal{font-size:22px;font-weight:bold;padding:6px;border-radius:10px;}
 .gold{color:#FFD700;}.silver{color:#C0C0C0;}.bronze{color:#cd7f32;}
-@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-5px);}}
 .start-row{display:flex;flex-direction:column;gap:15px;align-items:center;}
 .start-row input,.start-row button{width:100%;max-width:400px;box-sizing:border-box;font-size:18px;padding:15px 20px;border-radius:25px;border:none;text-align:center;transition:0.2s;}
 .start-row input:focus{outline:none;box-shadow:0 0 10px var(--accent);}
@@ -29,27 +37,37 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
 #top10Box{max-height:300px;overflow-y:auto;}
 #top10Box p{margin:5px 0;font-size:16px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
 #top10Box h3{text-align:center;}
-.alert-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.4s ease;z-index:999;}
-.alert-overlay.active{opacity:1;pointer-events:auto;}
-.alert-box{background:var(--card);backdrop-filter:blur(15px);padding:20px 30px;border-radius:20px;text-align:center;width:80%;max-width:350px;box-shadow:0 15px 40px rgba(0,0,0,0.3);font-size:16px;color:var(--text);transform: translateY(-20px);opacity:0;transition: transform 0.4s ease, opacity 0.4s ease;}
-.alert-overlay.active .alert-box{transform: translateY(0);opacity:1;}
-@media(max-width:600px){header{font-size:18px;} .card{padding:15px;}}
+/* Custom Alert */
+.alert-overlay, #glassAlert{
+position:fixed;top:0;left:0;width:100%;height:100%;
+display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:9999;
+}
+.alert-overlay.active, #glassAlert.show{opacity:1;pointer-events:auto;}
+.alert-box, #glassAlertBox{
+background:rgba(255,255,255,0.2);backdrop-filter:blur(15px);padding:25px 35px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);
+color:#000000;
+font-weight: bold;font-size:20px;text-align:center;transform:translateY(-20px);transition:0.3s;
+}
+#glassAlert{
+position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:none;
+}
 </style>
 </head>
 <body>
 
 <header>
-Sci Quiz Master
+Sci Master
 <div class="toggle" onclick="toggleMode()">
   <i id="modeIcon" class="fa-solid fa-sun"></i>
 </div>
 </header>
 
 <div class="container">
+
 <div id="startBox" class="card">
 <h3 style="text-align:center;margin-bottom:20px;">Enter Details</h3>
 <div id="playedCount" style="text-align:center; margin-bottom:15px;">
-  <h3>Players Played Today: <span id="playedNumber">0</span></h3>
+  <h3>Players Today: <span id="playedNumber">0</span></h3>
 </div>
 <div class="start-row">
 <input id="school" placeholder="School Name">
@@ -66,176 +84,153 @@ Sci Quiz Master
 <div id="top10List"></div>
 </div>
 
+<!-- Custom Alerts -->
 <div id="customAlert" class="alert-overlay">
-  <div class="alert-box">
-    <p id="alertMessage"></p>
-  </div>
+  <div class="alert-box"><p id="alertMessage"></p></div>
 </div>
+
+<div id="glassAlert"><div id="glassAlertBox">⚠️ Action Blocked!</div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, onSnapshot, query, orderBy, limit, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCTfQQHRjOf361iehJWd6Ao4on8yReT1l4",
-  authDomain: "scimasterquiz.firebaseapp.com",
-  projectId: "scimasterquiz",
-  storageBucket: "firebasestorage.app",
-  messagingSenderId: "234379811433",
-  appId: "1:234379811433:web:c81613ba47357caefca0f8"
-};
-
+const firebaseConfig = { apiKey:"AIzaSyCTfQQHRjOf361iehJWd6Ao4on8yReT1l4", authDomain:"scimasterquiz.firebaseapp.com", projectId:"scimasterquiz" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const schoolInput = document.getElementById("school");
-const nameInput = document.getElementById("name");
-const startBox = document.getElementById("startBox");
-const quizBox = document.getElementById("quizBox");
-const resultBox = document.getElementById("resultBox");
+const schoolInput=document.getElementById("school");
+const nameInput=document.getElementById("name");
+const startBox=document.getElementById("startBox");
+const quizBox=document.getElementById("quizBox");
+const resultBox=document.getElementById("resultBox");
 
-window.showAlert = function(msg){
-  const overlay = document.getElementById("customAlert");
-  document.getElementById("alertMessage").innerText = msg;
-  overlay.classList.add("active");
-  setTimeout(()=> overlay.classList.remove("active"),2500);
+window.showAlert=function(msg){
+  const alertOverlay=document.getElementById("customAlert");
+  document.getElementById("alertMessage").innerText=msg;
+  alertOverlay.classList.add("active");
+  setTimeout(()=>alertOverlay.classList.remove("active"),2500);
 }
 
-let questions=[], current=0, answers=[], key="";
-let timer, timeLeft=60;
-function getDeviceId(){ return btoa(navigator.userAgent+screen.width+screen.height); }
-const deviceId = getDeviceId();
+window.showGlassAlert=function(msg){
+  const glass=document.getElementById("glassAlert");
+  document.getElementById("glassAlertBox").innerText=msg||"⚠️ Action Blocked!";
+  glass.style.display="flex";
+  setTimeout(()=>glass.style.display="none",2000);
+}
 
-window.startQuiz = async function(){
-    const school = schoolInput.value.trim();
-    const name = nameInput.value.trim();
-    if(!school || !name){ showAlert("Please fill all fields"); return; }
-    key = name + " : " + school;
+let questions=[], current=0, score=0, key="", timer, timeLeft=60;
 
-    const snap = await getDocs(collection(db,"participants"));
-    const todayStart = new Date(new Date().setHours(0,0,0,0)).getTime();
-    const todayEnd = todayStart + 24*60*60*1000;
-    let playedToday=false, devicePlayed=false;
-    snap.forEach(doc=>{
-        const d=doc.data();
-        const ts = d.timestamp?.seconds ? d.timestamp.seconds*1000 : 0;
-        if(d.key===key && ts>=todayStart && ts<todayEnd) playedToday=true;
-        if(d.deviceId===deviceId) devicePlayed=true;
-    });
+async function hasPlayed(key){
+  const q=query(collection(db,"participants"), where("key","==",key));
+  const snap=await getDocs(q);
+  return !snap.empty;
+}
 
-    if(playedToday){ showAlert("Already played today!"); return; }
-    if(devicePlayed){ showAlert("This device has already played!"); return; }
+window.startQuiz=async function(){
+  const school=schoolInput.value.trim();
+  const name=nameInput.value.trim();
+  if(!school||!name){ showAlert("කරුණාකර සියලු fields පුරවන්න"); return; }
+  key=name+" : "+school;
+  if(await hasPlayed(key)){ showAlert("❌ Submission Blocked: ඔබ quiz එක දැනටමත් ක්‍රීඩා කර ඇත!"); return; }
 
-    const qSnap = await getDocs(collection(db,"questions"));
-    questions=[];
-    qSnap.forEach(doc=>questions.push(doc.data()));
-    if(questions.length===0){ showAlert("No questions!"); return; }
-    questions.sort(()=>Math.random()-0.5);
+  const qSnap=await getDocs(collection(db,"questions"));
+  questions=[];
+  qSnap.forEach(doc=>questions.push(doc.data()));
+  if(questions.length===0){ showAlert("No questions found!"); return; }
+  questions.sort(()=>Math.random()-0.5);
 
-    startBox.style.display="none";
-    quizBox.style.display="block";
-    answers=[]; current=0;
-    loadQuestion();
+  startBox.style.display="none";
+  quizBox.style.display="block";
+  loadQuestion();
 }
 
 function loadQuestion(){
-    if(current>=questions.length){ finish(); return; }
-    let q = questions[current];
-    let html=`<h3>${current+1}. ${q.q}</h3>`;
-    q.options.forEach((o,i)=>{ html+=`<div class="option" onclick="selectAns(${i})">${o}</div>`; });
-    html+=`<p id="timer" style="margin-top:10px;font-weight:bold;">Time Left: 60s</p>`;
-    quizBox.innerHTML=html;
-    timeLeft=60; clearInterval(timer);
-    timer=setInterval(()=>{
-        timeLeft--;
-        document.getElementById("timer").innerText=`Time Left: ${timeLeft}s`;
-        if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }
-    },1000);
+  if(current>=questions.length){ finish(); return; }
+  let q=questions[current];
+  let html=`<h3>${current+1}. ${q.q}</h3>`;
+  q.options.forEach((o,i)=>{ html+=`<div class="option" onclick="selectAns(${i})">${o}</div>`; });
+  html+=`<p id="timer" style="margin-top:10px;font-weight:bold;">Time Left: 60s</p>`;
+  quizBox.innerHTML=html;
+
+  timeLeft=60; clearInterval(timer);
+  timer=setInterval(()=>{
+    timeLeft--; document.getElementById("timer").innerText=`Time Left: ${timeLeft}s`;
+    if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }
+  },1000);
 }
 
 window.selectAns=function(i){
-    clearInterval(timer);
-    answers.push(i);
-    const options=document.querySelectorAll(".option");
-    const correct=questions[current].answer;
-    options.forEach((el,idx)=>{
-        if(idx===correct){ el.style.background="green"; el.style.color="white"; }
-        if(idx===i && i!==correct){ el.style.background="red"; el.style.color="white"; }
-        el.style.pointerEvents="none";
-    });
-    setTimeout(()=>{ current++; loadQuestion(); },1000);
+  clearInterval(timer);
+  const options=document.querySelectorAll(".option");
+  const correct=questions[current].answer;
+  options.forEach((el,idx)=>{
+    if(idx===correct){ el.style.background="green"; el.style.color="white"; }
+    if(idx===i && i!==correct){ el.style.background="red"; el.style.color="white"; }
+    el.style.pointerEvents="none";
+  });
+  if(i===correct) score++;
+  setTimeout(()=>{ current++; loadQuestion(); },1000);
 }
 
 async function finish(){
-    quizBox.style.display="none";
-    resultBox.style.display="block";
-    let finalScore=0;
-    for(let i=0;i<questions.length;i++){ if(answers[i]===questions[i].answer) finalScore++; }
-    try{
-        await addDoc(collection(db,"participants"),{
-            key:key,
-            score:finalScore,
-            timestamp:serverTimestamp(),
-            deviceId:deviceId
-        });
-        resultBox.innerHTML=`<h2>Your Score: ${finalScore}</h2>`;
-    }catch(err){ resultBox.innerHTML=`<h2>Submission Blocked ⚠️</h2>`; }
+  quizBox.style.display="none";
+  resultBox.style.display="block";
+  await addDoc(collection(db,"participants"),{
+    key,key, score, timestamp:serverTimestamp(), deviceId:"web", month:new Date().getMonth()+1
+  });
+  resultBox.innerHTML=`<h2>Your Score: ${score}</h2>`;
+  updateTop10(); updatePlayedCount();
 }
 
 window.toggleMode=function(){
-    document.body.classList.toggle("dark");
-    const icon=document.getElementById("modeIcon");
-    icon.classList.contains("dark")?icon.classList.replace("fa-sun","fa-moon"):icon.classList.replace("fa-moon","fa-sun");
+  document.body.classList.toggle("dark");
+  const icon=document.getElementById("modeIcon");
+  if(document.body.classList.contains("dark")) icon.classList.replace("fa-sun","fa-moon");
+  else icon.classList.replace("fa-moon","fa-sun");
 }
 
 function updateTop10(){
-    const topQuery=query(collection(db,"participants"), orderBy("score","desc"), limit(10));
-    const top10List=document.getElementById("top10List");
-    onSnapshot(topQuery, snap=>{
-        let html="", rank=1;
-        snap.forEach(doc=>{
-            const d=doc.data();
-            let medal="";
-            if(rank===1) medal='<span class="medal gold">🥇</span>';
-            if(rank===2) medal='<span class="medal silver">🥈</span>';
-            if(rank===3) medal='<span class="medal bronze">🥉</span>';
-            html+=`<p>${medal} ${rank}. ${d.key} - ${d.score}</p>`;
-            rank++;
-        });
-        top10List.innerHTML=html;
+  const topQuery=query(collection(db,"participants"), orderBy("score","desc"), orderBy("timestamp","asc"), limit(10));
+  const top10List=document.getElementById("top10List");
+  onSnapshot(topQuery,snap=>{
+    let html="",rank=1;
+    snap.forEach(doc=>{
+      const d=doc.data();
+      let medal="";
+      if(rank===1) medal='<span class="medal gold">🥇</span>';
+      if(rank===2) medal='<span class="medal silver">🥈</span>';
+      if(rank===3) medal='<span class="medal bronze">🥉</span>';
+      html+=`<p>${medal} ${rank}. ${d.key} - ${d.score}</p>`;
+      rank++;
     });
+    top10List.innerHTML=html;
+  });
 }
 
 function updatePlayedCount(){
-    const playedNumber=document.getElementById("playedNumber");
-    const participantsRef=collection(db,"participants");
-    onSnapshot(participantsRef,snap=>{
-        const todayStart=new Date(new Date().setHours(0,0,0,0)).getTime();
-        const todayEnd=todayStart+24*60*60*1000;
-        let count=0;
-        snap.forEach(doc=>{
-            const t=doc.data().timestamp?.seconds ? doc.data().timestamp.seconds*1000 : 0;
-            if(t>=todayStart && t<todayEnd) count++;
-        });
-        playedNumber.innerText=count;
+  const playedNumber=document.getElementById("playedNumber");
+  const participantsRef=collection(db,"participants");
+  onSnapshot(participantsRef,snap=>{
+    const now=new Date();
+    const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const todayEnd=todayStart+24*60*60*1000;
+    let count=0;
+    snap.forEach(doc=>{
+      const t=doc.data().timestamp?.toMillis();
+      if(t>=todayStart && t<todayEnd) count++;
     });
+    playedNumber.innerText=count;
+  });
 }
 
-updateTop10();
-updatePlayedCount();
+updateTop10(); updatePlayedCount();
 
-// DevTools + Right Click Block
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e=>{
-    if(e.key==="F12") e.preventDefault();
-    if(e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) e.preventDefault();
-    if(e.ctrlKey && e.key.toLowerCase()==="u") e.preventDefault();
-});
+// ===== Block Right Click & Copy =====
+document.addEventListener('contextmenu', e=>{ e.preventDefault(); showGlassAlert("Right Click Blocked!"); });
+document.addEventListener('copy', e=>{ e.preventDefault(); showGlassAlert("Copy Blocked!"); });
+document.addEventListener('cut', e=>{ e.preventDefault(); showGlassAlert("Cut Blocked!"); });
+document.addEventListener('paste', e=>{ e.preventDefault(); showGlassAlert("Paste Blocked!"); });
 </script>
 </body>
 </html>
-
-
-
-
-
