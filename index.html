@@ -20,7 +20,7 @@ body.dark{
 --accent:#00c6ff;
 }
 body{
-margin:0;font-family:Segoe UI;background:var(--bg);color:var(--text);transition:0.3s;
+margin:0;font-family:Segoe UI, sans-serif;background:var(--bg);color:var(--text);transition:0.3s;
 position:relative;
 }
 header{display:flex;justify-content:space-between;align-items:center;padding:15px 25px;font-size:22px;font-weight:bold;}
@@ -60,9 +60,13 @@ font-weight: bold;font-size:20px;text-align:center;transform:translateY(-20px);t
 position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:none;
 }
 
-/* Top10 Table Glass + Hover + Medal Colors */
+/* Top10 Table Glass + Hover + Medal Colors + Mobile Responsive */
+#top10List {
+  overflow-x:auto;
+}
 #top10List table {
   width: 100%;
+  min-width: 400px;
   border-collapse: collapse;
   backdrop-filter: blur(15px);
   background: rgba(255,255,255,0.15);
@@ -70,35 +74,36 @@ position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:none;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
 #top10List th, #top10List td {
-  padding: 12px 10px;
+  padding: 10px 8px;
   text-align: left;
   border-bottom: 1px solid rgba(255,255,255,0.3);
   color: var(--text);
   font-weight: 500;
+  font-size:14px;
 }
-
 #top10List th {
   background: rgba(255,255,255,0.25);
-  font-size: 16px;
+  font-size:15px;
 }
-
 #top10List tr:hover {
   background: rgba(0,114,255,0.1);
   cursor: default;
   transition: 0.3s;
 }
-
-.medal-emoji {
-  font-size: 18px;
-  font-weight: bold;
-  padding-right: 4px;
-}
-
+.medal-emoji { font-size: 16px; padding-right: 4px; }
 .gold { color: #FFD700; }
 .silver { color: #C0C0C0; }
 .bronze { color: #cd7f32; }
+
+/* Small screen adjustments */
+@media screen and (max-width:480px){
+header{font-size:18px;padding:10px 15px;}
+.start-row input,.start-row button{font-size:16px;padding:12px 15px;}
+#top10List th,#top10List td{font-size:12px;padding:8px 6px;}
+.medal-emoji{font-size:14px;}
+#quizTimer{font-size:16px;}
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -170,17 +175,12 @@ setTimeout(()=>glass.style.display="none",2000);
 
 let questions=[], current=0, score=0, key="", timer, timeLeft=60;
 
-// Device ID function
 function getDeviceId() {
     let id = localStorage.getItem("deviceId");
-    if (!id) {
-        id = 'dev_' + Math.random().toString(36).substr(2, 16);
-        localStorage.setItem("deviceId", id);
-    }
+    if (!id) { id = 'dev_' + Math.random().toString(36).substr(2, 16); localStorage.setItem("deviceId", id); }
     return id;
 }
 
-// Check if device has already played
 async function hasPlayedDevice(deviceId){
     const q = query(collection(db,"participants"), where("deviceId","==",deviceId));
     const snap = await getDocs(q);
@@ -191,25 +191,17 @@ window.startQuiz = async function() {
     const school = schoolInput.value.trim();
     const name = nameInput.value.trim();
     if (!school || !name) { showAlert("කරුණාකර සියලු fields පුරවන්න"); return; }
-
     const participantsSnap = await getDocs(collection(db, "participants"));
     if (participantsSnap.size >= 5000) { showAlert("❌ Sorry! Player limit reached for today."); return; }
-
     const deviceId = getDeviceId();
-    if (await hasPlayedDevice(deviceId)) {
-        showAlert("❌ Submission Blocked: ඔබ quiz එක දැනටමත් ක්‍රීඩා කර ඇත!");
-        return;
-    }
-
+    if (await hasPlayedDevice(deviceId)) { showAlert("❌ Submission Blocked: ඔබ quiz එක දැනටමත් ක්‍රීඩා කර ඇත!"); return; }
     key = name + " : " + school;
     window.currentDeviceId = deviceId;
-
     const qSnap = await getDocs(collection(db, "questions"));
     questions = [];
     qSnap.forEach(doc => questions.push(doc.data()));
     if (questions.length === 0) { showAlert("No questions found!"); return; }
     questions.sort(() => Math.random() - 0.5);
-
     startBox.style.display = "none";
     quizBox.style.display = "block";
     current = 0;
@@ -223,12 +215,10 @@ function loadQuestion(){
     let html=`<h3>${current+1}. ${q.q}</h3>`;
     q.options.forEach((o,i)=>{ html+=`<div class="option" onclick="selectAns(${i})">${o}</div>`; });
     quizBox.innerHTML=html;
-
     let timerElem = document.createElement("h3");
     timerElem.id = "quizTimer";
     timerElem.innerText = "Time Left: 60s";
     quizBox.appendChild(timerElem);
-
     timeLeft=60; clearInterval(timer);
     timer=setInterval(()=>{
         timeLeft--;
@@ -253,23 +243,12 @@ window.selectAns=function(i){
 async function finish(){
     quizBox.style.display="none";
     resultBox.style.display="block";
-
     await addDoc(collection(db,"participants"),{
-        key,
-        score,
-        timestamp:serverTimestamp(),
-        deviceId: window.currentDeviceId,
-        month:new Date().getMonth()+1
+        key, score, timestamp:serverTimestamp(), deviceId: window.currentDeviceId, month:new Date().getMonth()+1
     });
-
     if(score >= 15){ confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
-
-    resultBox.innerHTML = `<h2>Your Score: ${score}</h2>
-    <h3 id="returnTimer" style="margin-top:15px;color:red;">Returning to Home in 6s</h3>`;
-
-    updateTop10();
-    updatePlayedCount();
-
+    resultBox.innerHTML = `<h2>Your Score: ${score}</h2><h3 id="returnTimer" style="margin-top:15px;color:red;">Returning to Home in 6s</h3>`;
+    updateTop10(); updatePlayedCount();
     let waitTime = 6;
     const returnTimer = document.getElementById("returnTimer");
     const countdownInterval = setInterval(()=>{
@@ -294,53 +273,22 @@ function updateTop10(){
     limit(50)
   );
   const top10List = document.getElementById("top10List");
-
   onSnapshot(topQuery, snap => {
-    let html = `<table>
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Name</th>
-                      <th>Score</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>`;
-    
-    let rank = 1;
-    let displayRank = 1;
-    let prevScore = null;
-    let count = 0;
-
+    let html = `<table><thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>Time</th></tr></thead><tbody>`;
+    let rank = 1, displayRank = 1, prevScore = null, count = 0;
     snap.forEach(doc => {
-      const d = doc.data();
-      if(count >= 10) return;
-
-      if(prevScore !== null && d.score < prevScore){
-        rank = displayRank;
-      }
+      const d = doc.data(); if(count >= 10) return;
+      if(prevScore !== null && d.score < prevScore){ rank = displayRank; }
       prevScore = d.score;
-
-      let ts = d.timestamp?.toDate?.();
-      let tsStr = ts ? `${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}` : "";
+      let ts = d.timestamp?.toDate?.(); let tsStr = ts ? `${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}` : "";
       let nameOnly = d.key.split(' : ')[0];
-
       let medal = "";
-      if(rank === 1) medal = `<span class="medal-emoji gold">🥇</span>`;
-      else if(rank === 2) medal = `<span class="medal-emoji silver">🥈</span>`;
-      else if(rank === 3) medal = `<span class="medal-emoji bronze">🥉</span>`;
-
-      html += `<tr>
-                 <td>${medal}${rank}</td>
-                 <td>${nameOnly}</td>
-                 <td>${d.score}</td>
-                 <td>${tsStr}</td>
-               </tr>`;
-
-      displayRank++;
-      count++;
+      if(rank===1) medal=`<span class="medal-emoji gold">🥇</span>`;
+      else if(rank===2) medal=`<span class="medal-emoji silver">🥈</span>`;
+      else if(rank===3) medal=`<span class="medal-emoji bronze">🥉</span>`;
+      html += `<tr><td>${medal}${rank}</td><td>${nameOnly}</td><td>${d.score}</td><td>${tsStr}</td></tr>`;
+      displayRank++; count++;
     });
-
     html += `</tbody></table>`;
     top10List.innerHTML = html;
   });
