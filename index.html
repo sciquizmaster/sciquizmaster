@@ -249,16 +249,34 @@ async function finish(){
 
 // Leaderboard
 async function updateTop10(){
-  const top10List=document.getElementById("top10List");
-  const q=query(collection(db,"participants"),orderBy("score","desc"),orderBy("timestamp","asc"),limit(50));
-  const snap=await getDocs(q); let html=`<table><thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>Time</th></tr></thead><tbody>`;
-  let rank=1,displayRank=1,prevScore=null,count=0;
-  snap.forEach(doc=>{ if(count>=10) return; const d=doc.data(); if(prevScore!==null && d.score<prevScore) rank=displayRank; prevScore=d.score;
-    let ts=d.timestamp?.toDate?.(); let tsStr=ts?`${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}`:"";
-    let nameOnly=d.key.split(' : ')[0]; let medal=""; if(rank===1)medal=`<span class="medal-emoji gold">🥇</span>`; else if(rank===2)medal=`<span class="medal-emoji silver">🥈</span>`; else if(rank===3)medal=`<span class="medal-emoji bronze">🥉</span>`;
-    html+=`<tr><td>${medal}${rank}</td><td>${nameOnly}</td><td>${d.score}</td><td>${tsStr}</td></tr>`; displayRank++; count++;
+  const topQuery = query(
+    collection(db,"participants"),
+    orderBy("score","desc"),
+    orderBy("timestamp","asc"),
+    limit(50)
+  );
+  const snap = await getDocs(topQuery);
+  const top10List = document.getElementById("top10List");
+  let html = `<table><thead><tr><th>Rank</th><th>Name</th><th>School</th><th>Score</th><th>Time</th></tr></thead><tbody>`;
+  let rank = 1, displayRank = 1, prevScore = null, count = 0;
+  snap.forEach(doc => {
+    const d = doc.data(); 
+    if(count >= 10) return;
+    if(prevScore !== null && d.score < prevScore){ rank = displayRank; }
+    prevScore = d.score;
+    let ts = d.timestamp?.toDate?.(); 
+    let tsStr = ts ? `${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}` : "";
+    let nameOnly = d.key.split(' : ')[0];
+    let schoolOnly = d.key.split(' : ')[1] || "";
+    let medal = "";
+    if(rank===1) medal=`<span class="medal-emoji gold">🥇</span>`;
+    else if(rank===2) medal=`<span class="medal-emoji silver">🥈</span>`;
+    else if(rank===3) medal=`<span class="medal-emoji bronze">🥉</span>`;
+    html += `<tr><td>${medal}${rank}</td><td>${nameOnly}</td><td>${schoolOnly}</td><td>${d.score}</td><td>${tsStr}</td></tr>`;
+    displayRank++; count++;
   });
-  html+=`</tbody></table>`; top10List.innerHTML=html;
+  html += `</tbody></table>`;
+  top10List.innerHTML = html;
 }
 
 // Played count today
@@ -287,3 +305,4 @@ document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocke
 
 </body>
 </html>
+
