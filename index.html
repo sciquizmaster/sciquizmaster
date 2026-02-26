@@ -265,7 +265,7 @@ if(document.body.classList.contains("dark")) icon.classList.replace("fa-sun","fa
 else icon.classList.replace("fa-moon","fa-sun");
 }
 
-async function updateTop10(){
+async function fetchTop10() {
     const topQuery = query(
         collection(db,"participants"),
         orderBy("score","desc"),
@@ -274,12 +274,12 @@ async function updateTop10(){
     );
     const top10List = document.getElementById("top10List");
 
-    const snap = await getDocs(topQuery); // getDocs instead of onSnapshot
+    const snap = await getDocs(topQuery); // getDocs safe for free plan
     let html = `<table><thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>Time</th></tr></thead><tbody>`;
     let rank = 1, displayRank = 1, prevScore = null, count = 0;
 
     snap.forEach(doc => {
-        if(count >= 10) return; // Only top 10
+        if(count >= 10) return;
         const d = doc.data();
         if(prevScore !== null && d.score < prevScore){ rank = displayRank; }
         prevScore = d.score;
@@ -301,6 +301,11 @@ async function updateTop10(){
     top10List.innerHTML = html;
 }
 
+// Auto refresh every 5 seconds
+setInterval(fetchTop10, 5000);
+
+// Call immediately at start
+fetchTop10();
 
 function updatePlayedCount(){
 const playedNumber=document.getElementById("playedNumber");
