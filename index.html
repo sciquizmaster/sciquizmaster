@@ -7,123 +7,39 @@
 <link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-:root{
---bg:#f4f7fb;
---card:rgba(255,255,255,0.6);
---text:#111;
---accent:#0072ff;
---neon:#25D366;
-}
-body.dark{
---bg:#0f172a;
---card:rgba(255,255,255,0.08);
---text:#fff;
---accent:#00c6ff;
---neon:#25D366;
-}
-body{
-margin:0;font-family:Segoe UI, sans-serif;background:var(--bg);color:var(--text);transition:0.3s;position:relative;
-}
+:root{--bg:#f4f7fb;--card:rgba(255,255,255,0.6);--text:#111;--accent:#0072ff;--neon:#25D366;}
+body.dark{--bg:#0f172a;--card:rgba(255,255,255,0.08);--text:#fff;--accent:#00c6ff;--neon:#25D366;}
+body{margin:0;font-family:Segoe UI, sans-serif;background:var(--bg);color:var(--text);transition:0.3s;position:relative;}
 header{display:flex;justify-content:space-between;align-items:center;padding:15px 25px;font-size:22px;font-weight:bold;}
 .toggle{cursor:pointer;padding:6px 12px;border-radius:20px;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;}
 .container{max-width:800px;margin:auto;padding:20px;position:relative;}
 .card{backdrop-filter:blur(20px);background:var(--card);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.2);margin-top:20px;position:relative;}
-.option{margin:10px 0;padding:10px;background:rgba(0,0,0,0.05);border-radius:10px;cursor:pointer;transition:0.2s;}
+.option{margin:10px 0;padding:10px;background:rgba(0,0,0,0.05);border-radius:10px;cursor:pointer;transition: transform 0.5s, background 0.5s, color 0.5s;}
 .option:hover{transform:scale(1.05);background:var(--accent);color:white;}
 .start-row{display:flex;flex-direction:column;gap:15px;align-items:center;}
 .start-row input,.start-row button{width:100%;max-width:400px;box-sizing:border-box;font-size:18px;padding:15px 20px;border-radius:25px;border:none;text-align:center;transition:0.2s;}
 .start-row input:focus{outline:none;box-shadow:0 0 10px var(--accent);}
 .start-row button:hover{transform:scale(1.03);opacity:0.9;}
-#top10Box{max-height:300px;overflow-y:auto;}
-#top10Box h3{text-align:center;}
-
-/* Timer style */
 #quizTimer{font-size:20px;font-weight:bold;color:red;text-align:center;margin-top:15px;}
-
-/* Custom Alerts */
-.alert-overlay{
-position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:9999;
-}
+.alert-overlay{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:9999;}
 .alert-overlay.active{opacity:1;pointer-events:auto;}
-.alert-box{
-background:rgba(255,255,255,0.2);backdrop-filter:blur(15px);padding:25px 35px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);color:#000;font-weight:bold;font-size:20px;text-align:center;transform:translateY(-20px);transition:0.3s;
-}
-
-/* Top10 Table Glass + Hover + Medal Colors */
-#top10List {overflow-x:auto;}
-#top10List table{width:100%;min-width:400px;border-collapse:collapse;backdrop-filter:blur(15px);background:rgba(255,255,255,0.15);border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-#top10List th,#top10List td{padding:10px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.3);color:var(--text);font-weight:500;font-size:14px;}
-#top10List th{background:rgba(255,255,255,0.25);font-size:15px;}
-#top10List tr:hover{background:rgba(0,114,255,0.1);cursor:default;transition:0.3s;}
-.medal-emoji{font-size:16px;padding-right:4px;}
-.gold{color:#FFD700;}
-.silver{color:#C0C0C0;}
-.bronze{color:#cd7f32;}
-
-.whatsapp-btn{
-  position: relative;
-  display: inline-block;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--text);
-  border-radius: 40px;
-  overflow: hidden;
-  transition: 0.3s;
-  background: transparent;
-  border: 2px solid transparent;
-}
-
-/* Animated Border */
-.whatsapp-btn::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 40px;
-  padding: 2px;
-  background: linear-gradient(90deg, #00ffcc, #0072ff, #ff00cc, #00ffcc);
-  background-size: 300% 300%;
-  animation: borderAnim 4s linear infinite;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-}
-
-/* Hover Effect */
-.whatsapp-btn:hover{
-  transform: scale(1.05);
-  background: var(--accent);
-  color: white;
-}
-
-/* Animation */
-@keyframes borderAnim{
-  0%{background-position: 0% 50%;}
-  50%{background-position: 100% 50%;}
-  100%{background-position: 0% 50%;}
-}
-
-@media screen and (max-width:480px){
-header{font-size:18px;padding:10px 15px;}
-.start-row input,.start-row button{font-size:16px;padding:12px 15px;}
-#top10List th,#top10List td{font-size:12px;padding:8px 6px;}
-.medal-emoji{font-size:14px;}
-#quizTimer{font-size:16px;}
-#whatsappBtn{font-size:16px;padding:12px 25px;}
-}
+.alert-box{background:rgba(255,255,255,0.2);backdrop-filter:blur(15px);padding:25px 35px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);color:#000;font-weight:bold;font-size:20px;text-align:center;transform:translateY(-20px);transition:0.3s;}
+.whatsapp-btn{position: relative;display: inline-block;padding: 15px 30px;font-size: 18px;font-weight: bold;text-decoration: none;color: var(--text);border-radius: 40px;overflow: hidden;transition: 0.3s;background: transparent;border: 2px solid transparent;}
+.whatsapp-btn::before{content: "";position: absolute;inset: 0;border-radius: 40px;padding: 2px;background: linear-gradient(90deg, #00ffcc, #0072ff, #ff00cc, #00ffcc);background-size: 300% 300%;animation: borderAnim 4s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite: xor;mask-composite: exclude;}
+.whatsapp-btn:hover{transform: scale(1.05);background: var(--accent);color: white;}
+@keyframes borderAnim{0%{background-position: 0% 50%;}50%{background-position: 100% 50%;}100%{background-position: 0% 50%;}}
+@keyframes slideIn {0% {opacity:0; transform: translateX(-80px);}100% {opacity:1; transform: translateX(0);}}
+.card.slide-in {animation: slideIn 1.5s ease forwards;} /* SLOW animation */
+#progressContainer{width:100%;background:rgba(0,0,0,0.1);border-radius:20px;height:20px;margin-top:15px;overflow:hidden;}
+#progressBar{height:100%;width:100%;background:var(--accent);transition:width 1s linear, background 0.5s ease;}
+@media screen and (max-width:480px){header{font-size:18px;padding:10px 15px;} .start-row input,.start-row button{font-size:16px;padding:12px 15px;} #quizTimer{font-size:16px;} #whatsappBtn{font-size:16px;padding:12px 25px;}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-<header>
-Sci Quiz Master
-<div class="toggle" onclick="toggleMode()">
-<i id="modeIcon" class="fa-solid fa-sun"></i>
-</div>
+<header>Sci Quiz Master
+<div class="toggle" onclick="toggleMode()"><i id="modeIcon" class="fa-solid fa-sun"></i></div>
 </header>
 
 <div class="container">
@@ -138,14 +54,8 @@ Sci Quiz Master
       <button onclick="prepareQuiz()">Start Quiz</button>
     </div>
   </div>
-
   <div id="quizBox" class="card" style="display:none;"></div>
   <div id="resultBox" class="card" style="display:none;"></div>
-
-  <div id="top10Box" class="card">
-    <h3>🏆 Top 10 Players</h3>
-    <div id="top10List"></div>
-  </div>
 </div>
 
 <div style="text-align:center; margin-top:25px;">
@@ -154,21 +64,12 @@ Sci Quiz Master
   </a>
 </div>
 
-
-<!-- Countdown Overlay -->
-<div id="countdownOverlay" class="alert-overlay">
-  <div class="alert-box" id="countdownBox"></div>
-</div>
-
-<!-- Custom Alert -->
-<div id="customAlert" class="alert-overlay">
-  <div class="alert-box" id="alertMessage"></div>
-</div>
-
+<div id="countdownOverlay" class="alert-overlay"><div class="alert-box" id="countdownBox"></div></div>
+<div id="customAlert" class="alert-overlay"><div class="alert-box" id="alertMessage"></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={apiKey:"AIzaSyCTfQQHRjOf361iehJWd6Ao4on8yReT1l4", authDomain:"scimasterquiz.firebaseapp.com", projectId:"scimasterquiz"};
 const app=initializeApp(firebaseConfig);
@@ -186,8 +87,7 @@ const alertMessage=document.getElementById("alertMessage");
 
 function showAlert(msg){alertMessage.innerText=msg;customAlert.classList.add("active");setTimeout(()=>customAlert.classList.remove("active"),2500);}
 function getDeviceId(){let id=localStorage.getItem("deviceId");if(!id){id='dev_'+Math.random().toString(36).substr(2,16);localStorage.setItem("deviceId",id);}return id;}
-
-let questions=[],current=0,score=0,key="",timer,timeLeft=60, currentDeviceId;
+let questions=[],current=0,score=0,timer,timeLeft=60,currentDeviceId;
 
 async function hasPlayedDevice(deviceId){
   const q=query(collection(db,"participants"),where("deviceId","==",deviceId));
@@ -195,26 +95,26 @@ async function hasPlayedDevice(deviceId){
   return !snap.empty;
 }
 
-// Pre-countdown before quiz
 window.prepareQuiz=async function(){
   const school=schoolInput.value.trim();
   const name=nameInput.value.trim();
   if(!school||!name){ showAlert("කරුණාකර සියලු fields පුරවන්න"); return; }
   currentDeviceId=getDeviceId();
   if(await hasPlayedDevice(currentDeviceId)){ showAlert("❌ Submission Blocked: ඔබ quiz එක දැනටමත් ක්‍රීඩා කර ඇත!"); return; }
-  key=name+" : "+school;
 
-  // Countdown overlay
+  const snap = await getDocs(collection(db,"participants"));
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const todayEnd = todayStart + 24*60*60*1000;
+  let todayCount = 0;
+  snap.forEach(doc=>{ const ts=doc.data().timestamp; if(ts && typeof ts.toMillis==="function"){ const t=ts.toMillis(); if(t>=todayStart && t<todayEnd) todayCount++; } });
+  if(todayCount >= 5000){ showAlert("❌ Quiz Limit Reached for Today! Try again tomorrow."); return; }
+
   let numbers=[3,2,1]; let idx=0;
   countdownOverlay.classList.add("active"); countdownBox.innerText=`Quiz is Ready! ${numbers[idx]}`;
-  const interval=setInterval(()=>{
-    idx++;
-    if(idx<numbers.length){ countdownBox.innerText=`Quiz is Ready! ${numbers[idx]}`; }
-    else{ clearInterval(interval); countdownOverlay.classList.remove("active"); startQuiz(); }
-  },1000);
+  const interval=setInterval(()=>{ idx++; if(idx<numbers.length){ countdownBox.innerText=`Quiz is Ready! ${numbers[idx]}`; } else{ clearInterval(interval); countdownOverlay.classList.remove("active"); startQuiz(); } },1000);
 }
 
-// Load Quiz
 window.startQuiz=async function(){
   const qSnap=await getDocs(collection(db,"questions")); questions=[]; qSnap.forEach(doc=>questions.push(doc.data()));
   if(questions.length===0){ showAlert("No questions found!"); return; }
@@ -224,85 +124,84 @@ window.startQuiz=async function(){
 
 function loadQuestion(){
   if(current>=questions.length){ finish(); return; }
-  const q=questions[current]; let html=`<h3>${current+1}. ${q.q}</h3>`;
+  const q=questions[current]; 
+  let html=`<h3>${current+1}. ${q.q}</h3>`;
   q.options.forEach((o,i)=>{ html+=`<div class="option" onclick="selectAns(${i})">${o}</div>`; });
-  quizBox.innerHTML=html;
-  let timerElem=document.createElement("h3"); timerElem.id="quizTimer"; timerElem.innerText="Time Left: 60s"; quizBox.appendChild(timerElem);
-  timeLeft=60; clearInterval(timer); timer=setInterval(()=>{timeLeft--;document.getElementById("quizTimer").innerText=`Time Left: ${timeLeft}s`; if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }},1000);
+  html += `<div id="progressContainer"><div id="progressBar"></div></div>`;
+  quizBox.innerHTML=html; 
+  quizBox.classList.add("slide-in"); 
+  setTimeout(()=>quizBox.classList.remove("slide-in"),1500);
+
+  timeLeft=60; 
+  const progressBar=document.getElementById("progressBar"); 
+  progressBar.style.background="var(--accent)";
+  progressBar.style.width="100%";
+  clearInterval(timer);
+  progressBar.style.transition="width 1s linear, background 0.5s ease";
+  timer=setInterval(()=>{
+    timeLeft--; 
+    progressBar.style.width=(timeLeft/60*100)+"%"; 
+    if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }
+  },1000);
 }
 
-window.selectAns=function(i){
-  clearInterval(timer); const options=document.querySelectorAll(".option"); const correct=questions[current].answer;
-  options.forEach((el,idx)=>{if(idx===correct) el.style.background="green",el.style.color="white"; if(idx===i && i!==correct) el.style.background="red",el.style.color="white"; el.style.pointerEvents="none";});
-  if(i===correct) score++; setTimeout(()=>{current++;loadQuestion();},1000);
+window.selectAns = function(i) {
+  clearInterval(timer);
+  const options = document.querySelectorAll(".option");
+  const correct = questions[current].answer;
+  const progressBar = document.getElementById("progressBar");
+
+  options.forEach((el, idx) => {
+    el.style.pointerEvents = "none";
+    if(idx === correct){
+      el.style.background = "green";
+      el.style.color = "white";
+      el.style.animation = "slideIn 1.5s ease forwards";
+      progressBar.style.background = "green";
+      if(i === correct) confetti({particleCount:30, spread:60, origin:{y:0.6}});
+      setTimeout(()=>{ el.style.animation=""; },1500);
+    }
+    if(idx === i && i !== correct){
+      el.style.background = "red";
+      el.style.color = "white";
+      el.innerText = "❌ " + el.innerText;
+      el.style.animation = "slideIn 1.5s ease forwards";
+      progressBar.style.background = "red";
+      setTimeout(()=>{ el.style.animation=""; },1500);
+    }
+  });
+
+  if(i === correct) score++;
+  setTimeout(()=>{ current++; loadQuestion(); }, 1500);
 }
 
 async function finish(){
   quizBox.style.display="none"; resultBox.style.display="block";
-  await addDoc(collection(db,"participants"),{key,score,timestamp:serverTimestamp(),deviceId:currentDeviceId,month:new Date().getMonth()+1});
+  await addDoc(collection(db,"participants"),{key:nameInput.value+" : "+schoolInput.value,score,timestamp:serverTimestamp(),deviceId:currentDeviceId,month:new Date().getMonth()+1});
   if(score>=15){ confetti({ particleCount:150,spread:70,origin:{y:0.6} }); }
   resultBox.innerHTML=`<h2>Your Score: ${score}</h2><h3 id="returnTimer" style="margin-top:15px;color:red;">Returning to Home in 6s</h3>`;
-  updateTop10(); updatePlayedCount();
+  updatePlayedCount();
   let waitTime=6; const returnTimer=document.getElementById("returnTimer");
-  const countdown=setInterval(()=>{waitTime--;if(waitTime>0)returnTimer.innerText=`Returning to Home in ${waitTime}s`; else{clearInterval(countdown); location.reload();}},1000);
+  const countdown=setInterval(()=>{waitTime--; if(waitTime>0) returnTimer.innerText=`Returning to Home in ${waitTime}s`; else{clearInterval(countdown); location.reload();}},1000);
 }
 
-// Leaderboard
-async function updateTop10(){
-  const topQuery = query(
-    collection(db,"participants"),
-    orderBy("score","desc"),
-    orderBy("timestamp","asc"),
-    limit(50)
-  );
-  const snap = await getDocs(topQuery);
-  const top10List = document.getElementById("top10List");
-  let html = `<table><thead><tr><th>Rank</th><th>Name</th><th>School</th><th>Score</th><th>Time</th></tr></thead><tbody>`;
-  let rank = 1, displayRank = 1, prevScore = null, count = 0;
-  snap.forEach(doc => {
-    const d = doc.data(); 
-    if(count >= 10) return;
-    if(prevScore !== null && d.score < prevScore){ rank = displayRank; }
-    prevScore = d.score;
-    let ts = d.timestamp?.toDate?.(); 
-    let tsStr = ts ? `${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}` : "";
-    let nameOnly = d.key.split(' : ')[0];
-    let schoolOnly = d.key.split(' : ')[1] || "";
-    let medal = "";
-    if(rank===1) medal=`<span class="medal-emoji gold">🥇</span>`;
-    else if(rank===2) medal=`<span class="medal-emoji silver">🥈</span>`;
-    else if(rank===3) medal=`<span class="medal-emoji bronze">🥉</span>`;
-    html += `<tr><td>${medal}${rank}</td><td>${nameOnly}</td><td>${schoolOnly}</td><td>${d.score}</td><td>${tsStr}</td></tr>`;
-    displayRank++; count++;
-  });
-  html += `</tbody></table>`;
-  top10List.innerHTML = html;
-}
-
-// Played count today
 async function updatePlayedCount(){
   const playedNumber=document.getElementById("playedNumber");
   const snap=await getDocs(collection(db,"participants"));
-  const now=new Date(); const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  const now=new Date();
+  const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
   const todayEnd=todayStart+24*60*60*1000; let count=0;
   snap.forEach(doc=>{ const t=doc.data().timestamp?.toMillis(); if(t>=todayStart && t<todayEnd) count++; });
   playedNumber.innerText=count;
 }
-
-// Auto refresh leaderboard every 5s
-setInterval(()=>{ updateTop10(); updatePlayedCount(); },5000);
+updatePlayedCount();
 
 window.toggleMode=function(){document.body.classList.toggle("dark"); const icon=document.getElementById("modeIcon"); if(document.body.classList.contains("dark")) icon.classList.replace("fa-sun","fa-moon"); else icon.classList.replace("fa-moon","fa-sun");}
-
-// Block right-click and copy
 document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right Click Blocked!");});
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
-
 </script>
-
 
 </body>
 </html>
-
