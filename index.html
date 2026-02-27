@@ -158,7 +158,13 @@ window.selectAns = function(i) {
       el.style.color = "white";
       el.style.animation = "slideIn 1.5s ease forwards";
       progressBar.style.background = "green";
-      if(i === correct) confetti({particleCount:30, spread:60, origin:{y:0.6}});
+      if(i === correct) confetti({
+  particleCount: 10,
+  spread: 25,
+  startVelocity: 18,
+  scalar: 0.5,
+  origin: { y: 0.75 }
+});
       setTimeout(()=>{ el.style.animation=""; },1500);
     }
     if(idx === i && i !== correct){
@@ -205,3 +211,4 @@ document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocke
 
 </body>
 </html>
+
