@@ -178,7 +178,7 @@ window.selectAns = function(i) {
   });
 
   if(i === correct) score++;
-  setTimeout(()=>{ current++; loadQuestion(); }, 2500);
+  setTimeout(()=>{ current++; loadQuestion(); }, 2000);
 }
 
 async function finish(){
@@ -211,5 +211,6 @@ document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocke
 
 </body>
 </html>
+
 
 
