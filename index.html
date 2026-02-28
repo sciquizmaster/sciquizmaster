@@ -19,7 +19,6 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
 .start-row{display:flex;flex-direction:column;gap:15px;align-items:center;}
 .start-row input,.start-row button{width:100%;max-width:400px;box-sizing:border-box;font-size:18px;padding:15px 20px;border-radius:25px;border:none;text-align:center;transition:0.2s;}
 .start-row input:focus{outline:none;box-shadow:0 0 10px var(--accent);}
-.start-row button:hover{transform:scale(1.03);opacity:0.9;}
 #quizTimer{font-size:20px;font-weight:bold;color:red;text-align:center;margin-top:15px;}
 .alert-overlay{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:9999;}
 .alert-overlay.active{opacity:1;pointer-events:auto;}
@@ -29,7 +28,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
 .whatsapp-btn:hover{transform: scale(1.05);background: var(--accent);color: white;}
 @keyframes borderAnim{0%{background-position: 0% 50%;}50%{background-position: 100% 50%;}100%{background-position: 0% 50%;}}
 @keyframes slideIn {0% {opacity:0; transform: translateX(-80px);}100% {opacity:1; transform: translateX(0);}}
-.card.slide-in {animation: slideIn 1.5s ease forwards;} /* SLOW animation */
+.card.slide-in {animation: slideIn 1.5s ease forwards;}
 #progressContainer{width:100%;background:rgba(0,0,0,0.1);border-radius:20px;height:20px;margin-top:15px;overflow:hidden;}
 #progressBar{height:100%;width:100%;background:var(--accent);transition:width 1s linear, background 0.5s ease;}
 @media screen and (max-width:480px){header{font-size:18px;padding:10px 15px;} .start-row input,.start-row button{font-size:16px;padding:12px 15px;} #quizTimer{font-size:16px;} #whatsappBtn{font-size:16px;padding:12px 25px;}}
@@ -37,11 +36,9 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-
 <header>Sci Quiz Master
 <div class="toggle" onclick="toggleMode()"><i id="modeIcon" class="fa-solid fa-sun"></i></div>
 </header>
-
 <div class="container">
   <div id="startBox" class="card">
     <h3 style="text-align:center;margin-bottom:20px;">Enter Details</h3>
@@ -57,13 +54,11 @@ header{display:flex;justify-content:space-between;align-items:center;padding:15p
   <div id="quizBox" class="card" style="display:none;"></div>
   <div id="resultBox" class="card" style="display:none;"></div>
 </div>
-
 <div style="text-align:center; margin-top:25px;">
   <a href="https://whatsapp.com/channel/YOUR_CHANNEL_LINK" target="_blank" class="whatsapp-btn">
     Get More Quiz 🔥 Join Our WhatsApp Channel
   </a>
 </div>
-
 <div id="countdownOverlay" class="alert-overlay"><div class="alert-box" id="countdownBox"></div></div>
 <div id="customAlert" class="alert-overlay"><div class="alert-box" id="alertMessage"></div></div>
 
@@ -72,8 +67,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, getDocs, addDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={apiKey:"AIzaSyCTfQQHRjOf361iehJWd6Ao4on8yReT1l4", authDomain:"scimasterquiz.firebaseapp.com", projectId:"scimasterquiz"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const schoolInput=document.getElementById("school");
 const nameInput=document.getElementById("name");
@@ -107,8 +102,16 @@ window.prepareQuiz=async function(){
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const todayEnd = todayStart + 24*60*60*1000;
   let todayCount = 0;
-  snap.forEach(doc=>{ const ts=doc.data().timestamp; if(ts && typeof ts.toMillis==="function"){ const t=ts.toMillis(); if(t>=todayStart && t<todayEnd) todayCount++; } });
-  if(todayCount >= 5000){ showAlert("❌ Quiz Limit Reached for Today! Try again tomorrow."); return; }
+  snap.forEach(doc=>{ 
+    const ts=doc.data().timestamp;
+    if(ts){
+      const t = ts.toMillis ? ts.toMillis() : new Date(ts).getTime();
+      if(t >= todayStart && t < todayEnd) todayCount++;
+    }
+  });
+  document.getElementById("playedNumber").innerText = todayCount;
+
+  if(todayCount >= 1500){ showAlert("❌ Quiz Limit Reached for Today! Try again tomorrow."); return; }
 
   let numbers=[3,2,1]; let idx=0;
   countdownOverlay.classList.add("active"); countdownBox.innerText=`Quiz is Ready! ${numbers[idx]}`;
@@ -116,7 +119,8 @@ window.prepareQuiz=async function(){
 }
 
 window.startQuiz=async function(){
-  const qSnap=await getDocs(collection(db,"questions")); questions=[]; qSnap.forEach(doc=>questions.push(doc.data()));
+  const qSnap=await getDocs(collection(db,"questions")); 
+  questions=qSnap.docs.map(doc => doc.data());
   if(questions.length===0){ showAlert("No questions found!"); return; }
   questions.sort(()=>Math.random()-0.5);
   startBox.style.display="none"; quizBox.style.display="block"; current=0; score=0; loadQuestion();
@@ -138,8 +142,7 @@ function loadQuestion(){
   progressBar.style.width="100%";
   clearInterval(timer);
   progressBar.style.transition="width 1s linear, background 0.5s ease";
-  timer=setInterval(()=>{
-    timeLeft--; 
+  timer=setInterval(()=>{ timeLeft--; 
     progressBar.style.width=(timeLeft/60*100)+"%"; 
     if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }
   },1000);
@@ -151,54 +154,67 @@ window.selectAns = function(i) {
   const correct = questions[current].answer;
   const progressBar = document.getElementById("progressBar");
 
+  questions[current].selectedAnswer = i;
+
   options.forEach((el, idx) => {
     el.style.pointerEvents = "none";
     if(idx === correct){
-      el.style.background = "green";
-      el.style.color = "white";
-      el.style.animation = "slideIn 1.5s ease forwards";
-      progressBar.style.background = "green";
-      if(i === correct) confetti({
-  particleCount: 10,
-  spread: 25,
-  startVelocity: 18,
-  scalar: 0.5,
-  origin: { y: 0.75 }
-});
-      setTimeout(()=>{ el.style.animation=""; },1500);
+      el.style.background = "green"; el.style.color = "white"; progressBar.style.background = "green";
+      if(i === correct) confetti({particleCount:30, spread:60, origin:{y:0.6}});
     }
     if(idx === i && i !== correct){
-      el.style.background = "red";
-      el.style.color = "white";
-      el.innerText = "❌ " + el.innerText;
-      el.style.animation = "slideIn 1.5s ease forwards";
-      progressBar.style.background = "red";
-      setTimeout(()=>{ el.style.animation=""; },1500);
+      el.style.background = "red"; el.style.color = "white"; el.innerText = "❌ " + el.innerText; progressBar.style.background = "red";
     }
   });
 
   if(i === correct) score++;
-  setTimeout(()=>{ current++; loadQuestion(); }, 2000);
+  setTimeout(()=>{ current++; loadQuestion(); }, 3500);
 }
 
 async function finish(){
   quizBox.style.display="none"; resultBox.style.display="block";
-  await addDoc(collection(db,"participants"),{key:nameInput.value+" : "+schoolInput.value,score,timestamp:serverTimestamp(),deviceId:currentDeviceId,month:new Date().getMonth()+1});
-  if(score>=15){ confetti({ particleCount:150,spread:70,origin:{y:0.6} }); }
-  resultBox.innerHTML=`<h2>Your Score: ${score}</h2><h3 id="returnTimer" style="margin-top:15px;color:red;">Returning to Home in 6s</h3>`;
+
+  await addDoc(collection(db,"participants"),{
+    key:nameInput.value+" : "+schoolInput.value,
+    score,
+    timestamp:serverTimestamp(),
+    deviceId:currentDeviceId,
+    answers: questions.map(q=>({q:q.q, selected:q.selectedAnswer})),
+    month: new Date().getMonth()+1
+  });
+
   updatePlayedCount();
-  let waitTime=6; const returnTimer=document.getElementById("returnTimer");
-  const countdown=setInterval(()=>{waitTime--; if(waitTime>0) returnTimer.innerText=`Returning to Home in ${waitTime}s`; else{clearInterval(countdown); location.reload();}},1000);
+
+  if(score>=15){ confetti({ particleCount:150, spread:70, origin:{y:0.6} }); }
+
+  resultBox.innerHTML=`<h2>Your Score: ${score}</h2><h3 id="returnTimer" style="margin-top:15px;color:red;">Returning to Home in 6s</h3>`;
+
+  let waitTime=6; 
+  const returnTimer=document.getElementById("returnTimer");
+  const countdown=setInterval(()=>{
+    waitTime--; 
+    if(waitTime>0) returnTimer.innerText=`Returning to Home in ${waitTime}s`; 
+    else{ clearInterval(countdown); location.reload(); }
+  },1000);
 }
 
 async function updatePlayedCount(){
-  const playedNumber=document.getElementById("playedNumber");
-  const snap=await getDocs(collection(db,"participants"));
-  const now=new Date();
-  const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-  const todayEnd=todayStart+24*60*60*1000; let count=0;
-  snap.forEach(doc=>{ const t=doc.data().timestamp?.toMillis(); if(t>=todayStart && t<todayEnd) count++; });
-  playedNumber.innerText=count;
+  const playedNumber = document.getElementById("playedNumber");
+  const snap = await getDocs(collection(db,"participants"));
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const todayEnd = todayStart + 24*60*60*1000; 
+  let count = 0;
+
+  snap.forEach(doc => {
+    const ts = doc.data().timestamp;
+    if(ts){
+      const t = ts.toMillis ? ts.toMillis() : new Date(ts).getTime();
+      if(t >= todayStart && t < todayEnd) count++;
+    }
+  });
+
+  playedNumber.innerText = count;
 }
 updatePlayedCount();
 
@@ -208,9 +224,5 @@ document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
 </script>
-
 </body>
 </html>
-
-
-
