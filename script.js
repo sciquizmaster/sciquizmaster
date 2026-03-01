@@ -85,6 +85,8 @@ function checkQuizAvailability() {
 
 
 
+
+
 // ------------------ Manual Questions ------------------
 questions = [
 
@@ -294,5 +296,4 @@ window.toggleMode=function(){document.body.classList.toggle("dark"); const icon=
 document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right Click Blocked!");});
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
-
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
