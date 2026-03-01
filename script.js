@@ -201,7 +201,7 @@ if(!checkQuizAvailability()) return;
   let todayCount = 0;
   snap.forEach(doc => { const t = doc.data().timestamp?.toMillis(); if(t>=todayStart && t<todayEnd) todayCount++; });
 
-  if(todayCount>=10000){ showAlert("❌ Our database has exceeded the daily limit of 10000+!, Try Again Next Day."); return; }
+  if(todayCount>=5000){ showAlert("❌ Our database has exceeded the daily Users limit of 5000+!, Try Again Next Day."); return; }
 
   // Countdown
   let numbers=[3,2,1], idx=0;
@@ -297,3 +297,4 @@ document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right 
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
+
