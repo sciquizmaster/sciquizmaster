@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sci Quiz Master</title>
+<link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+<header>Sci Quiz Master
+<div class="toggle" onclick="toggleMode()"><i id="modeIcon" class="fa-solid fa-sun"></i></div>
+</header>
+
+<div class="container">
+  <div id="startBox" class="card">
+    <h3 style="text-align:center;margin-bottom:20px;">Enter Details</h3>
+    <div id="playedCount" style="text-align:center; margin-bottom:15px;">
+      <h3>Players Today: <span id="playedNumber">0</span></h3>
+    </div>
+    <div class="start-row">
+      <input id="school" placeholder="School Name">
+      <input id="name" placeholder="Your Name">
+      <button onclick="prepareQuiz()">Start Quiz</button>
+    </div>
+  </div>
+  <div id="quizBox" class="card" style="display:none;"></div>
+  <div id="resultBox" class="card" style="display:none;"></div>
+</div>
+
+<div style="text-align:center; margin-top:25px;">
+  <a href="https://www.whatsapp.com/channel/0029Vb7e97o4tRruKXFxtc0o" target="_blank" class="whatsapp-btn">
+    Get More Quiz 🔥 Join Our WhatsApp Channel
+  </a>
+</div>
+
+<div id="countdownOverlay" class="alert-overlay"><div class="alert-box" id="countdownBox"></div></div>
+<div id="customAlert" class="alert-overlay"><div class="alert-box" id="alertMessage"></div></div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
