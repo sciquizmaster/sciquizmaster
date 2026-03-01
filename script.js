@@ -72,7 +72,7 @@ function checkQuizAvailability() {
     return false;
   }
 
-  if(hour >= 8){
+  if(hour >= 18){
     startBox.style.display = "none";
     quizBox.style.display = "none";
     showTypingPopup("🌙 Quiz Time Over!\nQuiz Available From 6:00 AM - 6:00 PM\nSee You Next Day 🔥");
@@ -82,8 +82,6 @@ function checkQuizAvailability() {
   customAlert.classList.remove("active");
   return true;
 }
-
-
 
 
 
@@ -296,4 +294,5 @@ window.toggleMode=function(){document.body.classList.toggle("dark"); const icon=
 document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right Click Blocked!");});
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
+
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
