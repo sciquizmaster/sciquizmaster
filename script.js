@@ -57,7 +57,7 @@ function checkQuizAvailability() {
   }
 
   // ------------------ Sunday check ------------------
-  if(day !== 1){ // Not Sunday
+  if(day !== 0){ // Not Sunday
     startBox.style.display = "none";
     quizBox.style.display = "none";
     showTypingPopup("🚫 Quiz Available Only on Sunday!\nPlease Come Back Next Sunday 🔥");
@@ -222,3 +222,4 @@ document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right 
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
+
