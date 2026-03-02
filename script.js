@@ -175,7 +175,7 @@ window.selectAns=function(i){
   });
 
   if(i===correct) score++;
-  setTimeout(()=>{ current++; loadQuestion(); },1700);
+  setTimeout(()=>{ current++; loadQuestion(); },1500);
 }
 
 // ---------------- Submit Quiz to Firestore ----------------
@@ -221,4 +221,5 @@ document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right 
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
+
 
