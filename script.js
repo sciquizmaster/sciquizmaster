@@ -83,6 +83,7 @@ function checkQuizAvailability() {
   return true;
 }
 
+
 async function loadQuestionsFromJSON() {
   try {
     const response = await fetch("questions.json");
@@ -150,7 +151,7 @@ function loadQuestion(){
   q.options.forEach((o,i)=>{ html+=`<div class="option" onclick="selectAns(${i})">${o}</div>`; });
   html += `<div id="progressContainer"><div id="progressBar"></div></div>`;
   quizBox.innerHTML=html; quizBox.classList.add("slide-in");
-  setTimeout(()=>quizBox.classList.remove("slide-in"),1000);
+  setTimeout(()=>quizBox.classList.remove("slide-in"),1500);
 
   timeLeft=60;
   const progressBar=document.getElementById("progressBar"); progressBar.style.width="100%"; progressBar.style.background="var(--accent)";
@@ -159,7 +160,7 @@ function loadQuestion(){
     timeLeft--;
     progressBar.style.width=(timeLeft/60*100)+"%";
     if(timeLeft<=0){ clearInterval(timer); selectAns(-1); }
-  },1000);
+  },1500);
 }
 
 window.selectAns=function(i){
@@ -221,5 +222,3 @@ document.addEventListener('contextmenu',e=>{e.preventDefault();showAlert("Right 
 document.addEventListener('copy',e=>{e.preventDefault();showAlert("Copy Blocked!");});
 document.addEventListener('cut',e=>{e.preventDefault();showAlert("Cut Blocked!");});
 document.addEventListener('paste',e=>{e.preventDefault();showAlert("Paste Blocked!");});
-
-
