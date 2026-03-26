@@ -1,45 +1,126 @@
 <!DOCTYPE html>
 <html lang="si">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sci Quiz Master</title>
-<link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sci Quiz Master</title>
+  <link rel="icon" type="image/x-icon" href="cropped_circle_image.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
+
 <body>
 
-<header>Sci Quiz Master
-<div class="toggle" onclick="toggleMode()"><i id="modeIcon" class="fa-solid fa-sun"></i></div>
-</header>
+  <div id="space-bg">
+    <canvas id="spaceCanvas"></canvas>
+  </div>
 
-<div class="container">
-  <div id="startBox" class="card">
-    <h3 style="text-align:center;margin-bottom:20px;">Enter Details</h3>
-    <div id="playedCount" style="text-align:center; margin-bottom:15px;">
-      <h3>Players Today: <span id="playedNumber">0</span></h3>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <header>Sci Quiz Master
+    <div class="toggle" onclick="toggleMode()"><i id="modeIcon" class="fa-solid fa-sun"></i></div>
+  </header>
+
+  <div class="container">
+    <div id="startBox" class="card">
+      <h3 style="text-align:center;margin-bottom:20px;">Enter Details</h3>
+      <div id="playedCount" style="text-align:center; margin-bottom:15px;">
+        <h3>Players Today: <span id="playedNumber">0</span></h3>
+      </div>
+      <div class="start-row">
+        <input id="school" placeholder="School Name">
+        <input id="name" placeholder="Your Name">
+        <button onclick="prepareQuiz()">Start Quiz</button>
+      </div>
+
+      <div class="dev-link">
+        <a href="#" id="devBtn"> Developer Info </a>
+      </div>
+
     </div>
-    <div class="start-row">
-      <input id="school" placeholder="School Name">
-      <input id="name" placeholder="Your Name">
-      <button onclick="prepareQuiz()">Start Quiz</button>
+    <div id="quizBox" class="card" style="display:none;"></div>
+    <div id="resultBox" class="card" style="display:none;"></div>
+  </div>
+
+  <!-- Developer Info -->
+  <div id="devPopup" class="dev-popup">
+
+    <div class="dev-box">
+
+      <span id="closeDev">&times;</span>
+
+      <img
+        src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjasaKLwdBKZRbSU8TsXtoga34Qr56kT9J5wJXpOKu6XyBKMOroq3HIH2lieiPkxfIFRwuRzbqudRpvtpx4t7DMFJzRApYOxTsqD8GsAiUgyJZ7svmxBssq9LL36XMXhrDnWltiJ2qwFYbiork8bJ14QrKYWnDyyr2YhZJtvqgjkkShvGBO_ehpKwnNjAw/s320/ChatGPT%20Image%20Sep%2011,%202025,%2007_20_37%20PM%20(1)-modified.png"
+        class="dev-avatar">
+
+      <div class="planet-orbit">
+        <div class="mini-planet"></div>
+      </div>
+
+      <h2>-Developer-</h2>
+      <h3>Krishantha Abeykoon</h3>
+      <p class="dev-role">Hi Fallow Me <span class="heart">❤</span></p>
+
+      <div class="social-row">
+
+        <a href="https://t.me/krishanthaabeykoon" target="_blank" class="social tg">
+          <i class="fa-brands fa-telegram fa-beat-fade"></i>
+        </a>
+
+        <a href="https://wa.me/94700000000" target="_blank" class="social wa">
+          <i class="fa-brands fa-whatsapp fa-beat-fade"></i>
+        </a>
+
+        <a href="" target="_blank" class="social fb">
+          <i class="fa-brands fa-facebook-f fa-beat-fade"></i>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Floating Help Button -->
+  <a href="#" id="helpBtn" class="floating-btn">🔥 Quiz Help</a>
+
+  <!-- Quiz Help Popup -->
+  <div id="helpPopup" class="alert-overlay">
+    <div class="alert-box">
+      <h3>Quiz Help</h3>
+      <p>1. Enter your school name and your name.</p>
+      <p>2. Each question has 60 seconds.</p>
+      <p>3. Select the correct answer to score points.</p>
+      <p>4. Play fair 🙂</p>
+      <button id="closeHelp">Close</button>
     </div>
   </div>
-  <div id="quizBox" class="card" style="display:none;"></div>
-  <div id="resultBox" class="card" style="display:none;"></div>
-</div>
 
-<div style="text-align:center; margin-top:25px;">
-  <a href="https://www.whatsapp.com/channel/0029Vb7e97o4tRruKXFxtc0o" target="_blank" class="whatsapp-btn">
-    Get More Quiz 🔥 Join Our WhatsApp Channel
-  </a>
-</div>
+  <div id="countdownOverlay" class="alert-overlay">
+    <div class="alert-box glass-alert">
+      <div id="countdownBox" class="countdown-text"></div>
+    </div>
+  </div>
 
-<div id="countdownOverlay" class="alert-overlay"><div class="alert-box" id="countdownBox"></div></div>
-<div id="customAlert" class="alert-overlay"><div class="alert-box" id="alertMessage"></div></div>
+  <div id="customAlert" class="alert-overlay">
+    <div class="alert-box glass-alert">
+      <div class="glass-icon"></div>
+      <div id="alertMessage" class="glass-text"></div>
+    </div>
+  </div>
 
-<script type="module" src="script.js"></script>
+  <div id="notifyContainer"></div>
+
+  <script type="module" src="script.js"></script>
+
 </body>
+
 </html>
