@@ -188,7 +188,7 @@ window.prepareQuiz = async function () {
     idx++;
 
     if (idx < numbers.length) {
-      setTimeout(showCount, 1500);
+      setTimeout(showCount, 800);
     } else {
       setTimeout(() => {
         countdownOverlay.classList.remove("active");
@@ -239,7 +239,7 @@ function loadQuestion() {
     timeLeft--;
     progressBar.style.width = (timeLeft / 60 * 100) + "%";
     if (timeLeft <= 0) { clearInterval(timer); selectAns(-1); }
-  }, 1500);
+  }, 1000);
 }
 
 window.selectAns = function (i) {
@@ -255,7 +255,7 @@ window.selectAns = function (i) {
   });
 
   if (i === correct) score++;
-  setTimeout(() => { current++; loadQuestion(); }, 1500);
+  setTimeout(() => { current++; loadQuestion(); }, 500);
 }
 
 // ---------------- Submit Quiz to Firestore ----------------
